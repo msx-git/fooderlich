@@ -28,7 +28,7 @@ class Card2 extends StatelessWidget {
           children: [
             const AuthorCard(
               authorName: 'Mike Katz',
-              title: 'Smoothie Connoisseurs',
+              title: 'Smoothie Connoisseur',
               imageProvider: AssetImage('assets/author_katz.jpeg'),
             ),
             Expanded(
