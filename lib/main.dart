@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fooderlich/home.dart';
-import 'fooderlich_theme.dart';
+import 'package:fooderlich/screens/home.dart';
+import 'constants/fooderlich_theme.dart';
 
 void main() {
   // 1
