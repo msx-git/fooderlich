@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fooderlich/pages/explore_page.dart';
-import 'package:fooderlich/pages/recipes.dart';
+import 'package:fooderlich/pages/recipes_page.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -10,12 +10,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int _selectedIndex = 1;
+  int _selectedIndex = 0;
 
   static List<Widget> pages = <Widget>[
     ExplorePage(),
     RecipesPage(),
-    Container(color: Colors.blue),
+    const Center(child: Text('This page is not ready yet')),
   ];
 
   void _onItemTapped(int index) {
