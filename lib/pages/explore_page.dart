@@ -20,7 +20,6 @@ class ExplorePage extends StatelessWidget {
             children: [
               TodayRecipeListView(recipes: snapshot.data?.todayRecipes ?? []),
               const SizedBox(height: 16),
-              // TODO: Replace this with FriendPostListView
               FriendPostListView(friendPosts: snapshot.data?.friendPosts ?? []),
             ],
           );

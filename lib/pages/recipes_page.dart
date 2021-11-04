@@ -14,7 +14,6 @@ class RecipesPage extends StatelessWidget {
       future: exploreService.getRecipes(),
       builder: (context, AsyncSnapshot<List<SimpleRecipe>> snapshot) {
         if(snapshot.connectionState == ConnectionState.done){
-          // TODO: Add RecipesGridView Here
           return RecipesGridView(recipes: snapshot.data ?? []);
         }else{
           return const Center(child: CircularProgressIndicator());

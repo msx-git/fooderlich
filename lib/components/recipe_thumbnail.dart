@@ -9,7 +9,7 @@ class RecipeThumbnail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.only(left: 10, top: 12, right: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
