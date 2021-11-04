@@ -15,7 +15,7 @@ class _HomeState extends State<Home> {
   static List<Widget> pages = <Widget>[
     ExplorePage(),
     RecipesPage(),
-    const Center(child: Text('This page is not ready yet')),
+    const Center(child: Text('This page is not ready yet,')),
   ];
 
   void _onItemTapped(int index) {
