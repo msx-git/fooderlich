@@ -6,7 +6,7 @@ class GroceryManager extends ChangeNotifier {
 
   List<GroceryItem> get groceryItems => List.unmodifiable(_groceryItems);
 
-  void _deleteItem(int index){
+  void deleteItem(int index){
     _groceryItems.removeAt(index);
     notifyListeners();
   }

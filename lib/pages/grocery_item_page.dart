@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fooderlich/components/grocery_tile.dart';
 import 'package:fooderlich/models/models.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -68,14 +69,36 @@ class _GroceryItemPageState extends State<GroceryItemPage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO 12: Add GroceryItemScreen Scaffold
     return Scaffold(
       appBar: AppBar(
         actions: [
           IconButton(
             icon: const Icon(Icons.check),
             onPressed: () {
-              // TODO 24: Add callback handler
+              // 1
+              final groceryItem = GroceryItem(
+                id: widget.originalItem?.id ?? const Uuid().v1(),
+                name: _nameController.text,
+                importance: _importance,
+                color: _currentColor,
+                quantity: _currentSliderValue,
+                date: DateTime(
+                  _dueDate.year,
+                  _dueDate.month,
+                  _dueDate.day,
+                  _timeOfDay.hour,
+                  _timeOfDay.minute,
+                ),
+              );
+
+              if (widget.isUpdating) {
+                // 2
+                widget.onUpdate(groceryItem);
+              } else {
+                // 3
+                widget.onCreate(groceryItem);
+              }
+
             },
           )
         ],
@@ -96,7 +119,23 @@ class _GroceryItemPageState extends State<GroceryItemPage> {
           buildColorPicker(context),
           const SizedBox(height: 8),
           buildQuantityField(),
-          // TODO: 19: Add Grocery Tile
+          GroceryTile(
+            item: GroceryItem(
+              id: 'previewMode',
+              name: _name,
+              importance: _importance,
+              color: _currentColor,
+              quantity: _currentSliderValue,
+              date: DateTime(
+                _dueDate.year,
+                _dueDate.month,
+                _dueDate.day,
+                _timeOfDay.hour,
+                _timeOfDay.minute,
+              ),
+            ),
+          ),
+
         ],
       ),
     );
@@ -128,61 +167,58 @@ class _GroceryItemPageState extends State<GroceryItemPage> {
   }
 
   Widget buildImportanceField() {
+    // 1
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Importance', style: GoogleFonts.lato(fontSize: 28.0)),
+        // 2
+        Text(
+          'Importance',
+          style: GoogleFonts.lato(fontSize: 28.0),
+        ),
+        // 3
         Wrap(
           spacing: 10.0,
           children: [
+            // 4
             ChoiceChip(
-              selectedColor: Colors.green,
-              side: const BorderSide(color: Colors.green),
-              backgroundColor: Colors.white,
-              label: Text('low', style: TextStyle(color: chipLabelColor1)),
+              // 5
+              selectedColor: Colors.black,
+              // 6
               selected: _importance == Importance.low,
+              label: const Text(
+                'low',
+                style: TextStyle(color: Colors.white),
+              ),
+              // 7
               onSelected: (selected) {
-                setState(() {
-                  _importance = Importance.low;
-                  chipLabelColor1 = Colors.white;
-                  chipLabelColor2 = Colors.green;
-                  chipLabelColor3 = Colors.green;
-                });
+                setState(() => _importance = Importance.low);
               },
             ),
             ChoiceChip(
-              selectedColor: Colors.green,
-              backgroundColor: Colors.white,
-              side: const BorderSide(color: Colors.green),
-              label: Text('medium', style: TextStyle(color: chipLabelColor2)),
+              selectedColor: Colors.black,
               selected: _importance == Importance.medium,
-              disabledColor: Colors.purple,
+              label: const Text(
+                'medium',
+                style: TextStyle(color: Colors.white),
+              ),
               onSelected: (selected) {
-                setState(() {
-                  _importance = Importance.medium;
-                  chipLabelColor1 = Colors.green;
-                  chipLabelColor2 = Colors.white;
-                  chipLabelColor3 = Colors.green;
-                });
+                setState(() => _importance = Importance.medium);
               },
             ),
             ChoiceChip(
-              selectedColor: Colors.green,
-              backgroundColor: Colors.white,
-              side: const BorderSide(color: Colors.green),
-              label: Text('high', style: TextStyle(color: chipLabelColor3)),
+              selectedColor: Colors.black,
               selected: _importance == Importance.high,
+              label: const Text(
+                'high',
+                style: TextStyle(color: Colors.white),
+              ),
               onSelected: (selected) {
-                setState(() {
-                  _importance = Importance.high;
-                  chipLabelColor1 = Colors.green;
-                  chipLabelColor2 = Colors.green;
-                  chipLabelColor3 = Colors.white;
-                });
+                setState(() => _importance = Importance.high);
               },
             ),
           ],
-        ),
+        )
       ],
     );
   }
