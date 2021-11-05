@@ -32,20 +32,9 @@ class _GroceryItemPageState extends State<GroceryItemPage> {
   Color _currentColor = Colors.green;
   int _currentSliderValue = 0;
 
-  bool isChipSelected = true;
-  Color chipLabelColor = Colors.green;
-
-  /*void changeColor(){
-    if(isChipSelected){
-      setState(() {
-        chipLabelColor = Colors.white;
-      });
-    }else{
-      setState(() {
-        chipLabelColor = Colors.green;
-      });
-    }
-  }*/
+  Color chipLabelColor1 = Colors.white;
+  Color chipLabelColor2 = Colors.green;
+  Color chipLabelColor3 = Colors.green;
 
   @override
   void initState() {
@@ -96,19 +85,19 @@ class _GroceryItemPageState extends State<GroceryItemPage> {
           style: GoogleFonts.lato(fontWeight: FontWeight.w600),
         ),
       ),
-      body: Container(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: [
-            buildNameField(),
-            buildImportanceField(),
-            // TODO 15: Add date picker
-            // TODO 16: Add time picker
-            // TODO 17: Add color picker
-            // TODO 18: Add slider
-            // TODO: 19: Add Grocery Tile
-          ],
-        ),
+      body: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 10),
+        children: [
+          buildNameField(),
+          buildImportanceField(),
+          buildDateField(context),
+          buildTimeField(context),
+          const SizedBox(height: 8),
+          buildColorPicker(context),
+          const SizedBox(height: 8),
+          buildQuantityField(),
+          // TODO: 19: Add Grocery Tile
+        ],
       ),
     );
   }
@@ -148,13 +137,16 @@ class _GroceryItemPageState extends State<GroceryItemPage> {
           children: [
             ChoiceChip(
               selectedColor: Colors.green,
-              side: const BorderSide(color: Colors.white),
+              side: const BorderSide(color: Colors.green),
               backgroundColor: Colors.white,
-              label: Text('low', style: TextStyle(color:chipLabelColor)),
+              label: Text('low', style: TextStyle(color: chipLabelColor1)),
               selected: _importance == Importance.low,
-              onSelected: (selected){
+              onSelected: (selected) {
                 setState(() {
                   _importance = Importance.low;
+                  chipLabelColor1 = Colors.white;
+                  chipLabelColor2 = Colors.green;
+                  chipLabelColor3 = Colors.green;
                 });
               },
             ),
@@ -162,23 +154,30 @@ class _GroceryItemPageState extends State<GroceryItemPage> {
               selectedColor: Colors.green,
               backgroundColor: Colors.white,
               side: const BorderSide(color: Colors.green),
-              label:  Text('medium', style: TextStyle(color: chipLabelColor)),
+              label: Text('medium', style: TextStyle(color: chipLabelColor2)),
               selected: _importance == Importance.medium,
-              onSelected: (selected){
+              disabledColor: Colors.purple,
+              onSelected: (selected) {
                 setState(() {
                   _importance = Importance.medium;
-                  chipLabelColor = Colors.white;
+                  chipLabelColor1 = Colors.green;
+                  chipLabelColor2 = Colors.white;
+                  chipLabelColor3 = Colors.green;
                 });
               },
             ),
             ChoiceChip(
               selectedColor: Colors.green,
+              backgroundColor: Colors.white,
               side: const BorderSide(color: Colors.green),
-              label: const Text('high', style: TextStyle(color: Colors.white)),
+              label: Text('high', style: TextStyle(color: chipLabelColor3)),
               selected: _importance == Importance.high,
-              onSelected: (selected){
+              onSelected: (selected) {
                 setState(() {
                   _importance = Importance.high;
+                  chipLabelColor1 = Colors.green;
+                  chipLabelColor2 = Colors.green;
+                  chipLabelColor3 = Colors.white;
                 });
               },
             ),
@@ -188,11 +187,167 @@ class _GroceryItemPageState extends State<GroceryItemPage> {
     );
   }
 
-  // TODO: ADD buildDateField()
+  Widget buildDateField(BuildContext context) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Date',
+            style: GoogleFonts.lato(fontSize: 28.0),
+          ),
+          TextButton(
+            onPressed: () async {
+              final currentDate = DateTime.now();
+              final selectedDate = await showDatePicker(
+                context: context,
+                initialDate: currentDate,
+                firstDate: currentDate,
+                lastDate: DateTime(currentDate.year + 3),
+              );
+              setState(() {
+                if(selectedDate != null){
+                  _dueDate = selectedDate;
+                }
+              });
+            },
+            child: const Text('Select'),
+          ),
+        ],
+      ),
+      Text(DateFormat('dd-MM-yyyy').format(_dueDate)),
+    ]);
+  }
 
-  // TODO: Add buildTimeField()
+  Widget buildTimeField(BuildContext context){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Time of Day', style: GoogleFonts.lato(fontSize: 28.0)),
+            TextButton(
+              onPressed: () async {
+                final timeOfDay = await showTimePicker(
+                  context: context,
+                  initialTime: TimeOfDay.now(),
+                );
+                setState(() {
+                  if(timeOfDay!=null){
+                    _timeOfDay = timeOfDay;
+                  }
+                });
+              },
+              child: const Text('Select'))
+          ],
+        ),
+        Text(_timeOfDay.format(context)),
+      ],
+    );
+  }
 
-  // TODO: Add buildColorPicker()
+  Widget buildColorPicker(BuildContext context){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            Container(
+              height: 50.0,
+              width: 10.0,
+              color: _currentColor,
+            ),
+            const SizedBox(width: 8.0),
+            Text('Color',style: GoogleFonts.lato(fontSize: 28.0))
+          ],
+        ),
+        TextButton(onPressed:
+          (){
+            showDialog(
+              context: context,
+              builder: (context){
+                return AlertDialog(
+                  content: BlockPicker(
+                    pickerColor: Colors.white,
+                    onColorChanged: (color){
+                      setState(()=> _currentColor = color);
+                    },
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: (){
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Save'),
+                    )
+                  ],
+                );
+              },
+            );
+          },
+          child: const Text('Select'),
+        ),
+      ],
+    );
+  }
 
-  // TODO: Add buildQuantityField()
+  Widget buildQuantityField(){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.baseline,
+          textBaseline: TextBaseline.alphabetic,
+          children: [
+            Text(
+              'Quantity',
+              style: GoogleFonts.lato(fontSize: 28.0),
+            ),
+            const SizedBox(width: 16.0),
+            Text(
+              _currentSliderValue.toInt().toString(),
+              style: GoogleFonts.lato(fontSize: 18.0),
+            ),
+          ],
+        ),
+        Slider(
+          inactiveColor: _currentColor.withOpacity(0.5),
+          activeColor: _currentColor,
+          // 5
+          value: _currentSliderValue.toDouble(),
+          // 6
+          min: 0.0,
+          max: 100.0,
+          // 7
+          divisions: 100,
+          // 8
+          label: _currentSliderValue.toInt().toString(),
+          onChanged: (double value) {
+            setState(
+                  () {
+                _currentSliderValue = value.toInt();
+              },
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
