@@ -19,7 +19,7 @@ class Fooderlich extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: theme,
-      title: 'fooderlich',
+      title: 'Fooderlich',
       home: MultiProvider(
         providers: [
           // 2
