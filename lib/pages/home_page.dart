@@ -13,19 +13,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  // int _selectedIndex = 2;
 
   static List<Widget> pages = <Widget>[
     ExplorePage(),
     RecipesPage(),
     const GroceryPage(),
   ];
-
-  /*void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }*/
 
   @override
   Widget build(BuildContext context) {
