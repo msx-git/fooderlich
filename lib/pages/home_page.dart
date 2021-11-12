@@ -11,7 +11,7 @@ class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
-
+//Coming soon
 class _HomeState extends State<Home> {
 
   static List<Widget> pages = <Widget>[
